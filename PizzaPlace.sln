@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D283CEEF-F5C5-4E7F-8162-57623D6313AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5C70072E-AA39-40CF-A82D-2AE40242F400}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "PizzaPlace", "src\PizzaPlace\PizzaPlace.xproj", "{119D486E-7F37-4494-A0E6-B63395F2BE92}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{119D486E-7F37-4494-A0E6-B63395F2BE92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{119D486E-7F37-4494-A0E6-B63395F2BE92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{119D486E-7F37-4494-A0E6-B63395F2BE92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{119D486E-7F37-4494-A0E6-B63395F2BE92}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{119D486E-7F37-4494-A0E6-B63395F2BE92} = {D283CEEF-F5C5-4E7F-8162-57623D6313AD}
+	EndGlobalSection
+EndGlobal
