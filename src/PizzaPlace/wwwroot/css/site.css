@@ -1,79 +1,82 @@
-﻿body {
+﻿html {
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+	height: 90%;
 	background-color: #e4d38f;
 	padding-top: 50px;
 	padding-bottom: 20px;
+	background-image: url(../images/ovenpizza.jpg);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
 }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
 .body-content {
-	background-color: #f8f5e4;
+	min-height: 100%;
+	background-color: #e4d38f;
 	padding-left: 15px;
 	padding-right: 15px;
 }
 
-/* Set widths on the form inputs since otherwise they're 100% wide */
-input,
-select,
-textarea {
-	max-width: 280px;
-}
-
-#pizzaImgContent {
-	position: relative;
-}
-
-#pizzaImg {
-	width: 100px;
-	float: left;
-}
-
-#ovenImg {
-	position: absolute;
-	width: 600px;
-	top: 0px;
-	right: 0px;
-}
-
-.parallax {
-	background-image: url("img_parallax.jpg");
-	/* Set a specific height */
-	height: 500px;
-	/* Create the parallax scrolling effect */
-	background-attachment: fixed;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-}
-
-#menu {
-	display: block;
-	float: left;
+#leftMenu {
+	border: solid 1px black;
 	text-align: center;
-	padding: 0;
-	width: 10%;
-	/*height: 100%;*/
 	list-style-type: none;
-	margin: 0;
-	background-color: #f8f5e4;
-	position: fixed;
+	background-color: #e4d38f;
 }
 
-
-#mainContent {
-	vertical-align: top;
-	margin-left: 20%;
-	width: 50%;
-}
-
-	#mainContent ul {
-		list-style: none;
+	#leftMenu h2 {
+		border-bottom: solid 1px black;
 	}
 
-	#mainContent h3 {
-		font-weight: bold;
+#mainContent ul {
+	list-style: none;
+}
+
+#mainContent h3 {
+	font-weight: bold;
+	color: black;
+}
+
+#mainContent li {
+	padding-bottom: 5px;
+	border-bottom: solid 1px black;
+}
+
+#rightMenu {
+	border: solid 1px black;
+	text-align: center;
+	list-style-type: none;
+	background-color: #e4d38f;
+}
+
+	#rightMenu h2 {
+		border-bottom: solid 1px black;
 	}
 
 .ingredients {
 	color: #83828a;
+}
+
+.footer {
+	border-top: solid 1px black;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	padding: 1rem;
+	background-color: #efefef;
+	text-align: center;
+	background-color: #e4d38f;
+}
+
+.navbar {
+	background-color: #e4d38f;
+}
+
+#header {
+	text-align: center;
+	text-decoration: underline;
 }

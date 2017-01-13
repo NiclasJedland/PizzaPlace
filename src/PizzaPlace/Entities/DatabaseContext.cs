@@ -15,5 +15,7 @@ namespace PizzaPlace.Entities
 		public DbSet<Ingredient> Ingredients { get; set; }
 		public DbSet<Customer> Customers { get; set; }
 		public DbSet<FoodIngredient> FoodIngredients { get; set; }
+		public DbSet<Cart> Carts { get; set; }
+
 	}
 }

@@ -6,82 +6,48 @@
 
 </head>
 <body>
+	<div class="row">
 
-	<div id="menu">
-		<a asp-controller="Home" asp-action="Index"><h2>Menu</h2></a>
-		@foreach(var item in Model.FoodTypes)
-		{
-			<a asp-controller="Home" asp-action="Index" asp-route-search="@item.Type.ToString()"><h4>@item.Type</h4></a>
-		}
-	</div>
-
-	<div id="mainContent">
-		<ul>
-			@foreach(var pizza in Model.Foods)
+		<div id="leftMenu" class="col-md-2">
+			<a asp-controller="Home" asp-action="Index"><h2>Menu</h2></a>
+			@foreach(var item in Model.FoodTypes.OrderBy(s => s.Type))
 			{
-				<li>
-					<h3>@pizza.Name</h3>
-					<span class="ingredients">
-						@String.Join(", ", pizza.FoodIngredients.Select(p => p.Ingredient.IngredientName).ToList())
-					</span>
-				</li>
+				<a asp-controller="Home" asp-action="Index" asp-route-searchType="@item.Type.ToString()"><h4>@item.Type</h4></a>
 			}
-		</ul>
+		</div>
+
+		<div id="mainContent" class="col-md-6">
+			<ul>
+				@foreach(var pizza in Model.Foods.OrderBy(s => s.Type.Type))
+				{
+					<li>
+						<a><h3>@pizza.Name</h3></a>
+						<span class="ingredients">
+							@String.Join(", ", pizza.FoodIngredients.Select(s => s.Ingredient.IngredientName).ToList())
+						</span>
+					</li>
+				}
+			</ul>
+		</div>
+
+		<div id="rightMenu" class="col-md-4">
+			<form class="form-group" method="post">
+				<div>
+					@foreach(var item in Model.Cart.Food)
+					{
+						
+					}
+					<h2>@Model.Cart.TotalCost</h2>
+				</div>
+				<div>
+					<button class="btn" type="submit">CHECKOUT</button>
+					<button class="btn" type="reset">RESET</button>
+				</div>
+			</form>
+		</div>
 	</div>
 
 
-
-
-
-
-
-
-
-
-	@*<h2>Customers</h2>
-		<div>
-			<ul>
-				@foreach(var item in Model.Customers)
-				{
-					<li>@item.FirstName</li>
-				}
-			</ul>
-			<br />
-		</div>
-
-		<h2>Foods</h2>
-		<div>
-			<ul>
-				@foreach(var item in Model.Foods)
-				{
-					<li>@item.Name</li>
-				}
-			</ul>
-			<br />
-		</div>
-
-		<h2>FoodTypes</h2>
-		<div>
-			<ul>
-				@foreach(var item in Model.FoodTypes)
-				{
-					<li>@item.Type</li>
-				}
-			</ul>
-			<br />
-		</div>
-
-		<h2>Ingredients</h2>
-		<div>
-			<ul>
-				@foreach(var item in Model.Ingredients)
-				{
-					<li>@item.IngredientName</li>
-				}
-			</ul>
-			<br />
-		</div>*@
 
 </body>
-
 </html>

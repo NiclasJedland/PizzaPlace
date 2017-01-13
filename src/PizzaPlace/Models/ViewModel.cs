@@ -19,6 +19,8 @@ namespace PizzaPlace.Models
 		public FoodType FoodType { get; set; }
 		public Ingredient Ingredient { get; set; }
 		public FoodIngredient FoodIngredient { get; set; }
+		public Cart Cart { get; set; }
+
 
 	}
 }

@@ -43,5 +43,6 @@ namespace PizzaPlace.Entities
 		[StringLength(maximumLength: 50, MinimumLength = 1, ErrorMessage = "Max 50 characters, at least 1 character")]
 		public string Phone { get; set; }
 
+		public Cart Cart { get; set; }
 	}
 }

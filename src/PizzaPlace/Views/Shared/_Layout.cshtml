@@ -32,7 +32,7 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+
 					<li><a asp-area="" asp-controller="Home" asp-action="Login">Login</a></li>
 					<li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
 				</ul>
@@ -40,22 +40,17 @@
 		</div>
 	</div>
 
-	<div id="pizzaImgContent">
-		<img id="ovenImg" src="~/images/ovenpizza.jpg" />
-	</div>
-
 	<div class="container body-content">
 		<div id="header">
-			<img id="pizzaImg" src="~/images/pizza.png" />
 			<h1>TOMASOS PIZZERIA</h1>
 		</div>
 		<br />
 		<br />
 		@RenderBody()
-		<hr />
-		<footer>
-			<p>&copy; 2017 - Tomasos Pizzeria</p>
-		</footer>
+		<div class="footer">
+			<p>&copy; @DateTime.Today.Year - Tomasos Pizzeria</p>
+		</div>
+
 	</div>
 
 	<environment names="Development">
