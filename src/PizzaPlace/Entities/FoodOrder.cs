@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace PizzaPlace.Entities
 {
-    public class Cart
+    public class FoodOrder
     {
 		public int Id { get; set; }
-		public int CustomerId { get; set; }
-		public DateTime DateCreated { get; set; }
-
-
+		public int Quantity { get; set; }
+		public Order Order { get; set; }
+		public Food Food { get; set; }
 	}
 }

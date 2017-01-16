@@ -16,35 +16,33 @@ namespace PizzaPlace.Controllers
 			db = _context;
 		}
 
-
 		public IActionResult Index(string searchType)
 		{
+			DbInitialize.Seed(db);
 			var search = searchType?.Trim().ToLower();
 			var viewModel = new ViewModel();
-			List<FoodType> foodTypes;
-			List<Ingredient> ingredients;
-			List<Food> foods;
-			List<Customer> customers;
-			List<FoodIngredient> foodIngredients;
+			List<FoodType> foodTypes = db.FoodTypes.ToList();
+			List<Ingredient> ingredients = db.Ingredients.ToList();
+			List<Food> foods = db.Foods.ToList();
+			List<Customer> customers = db.Customers.ToList();
+			List<FoodIngredient> foodIngredients = db.FoodIngredients.ToList();
+
+			List<object> objects = new List<object>();
+
 			
-
-
-			foodTypes = db.FoodTypes.ToList();
-			ingredients = db.Ingredients.ToList();
-			foods = db.Foods.ToList();
-			customers = db.Customers.ToList();
-			foodIngredients = db.FoodIngredients.ToList();
+			
+			
 
 			if(!string.IsNullOrEmpty(searchType))
 			{
-				foods = foods.Where(s => s.Type.Type == searchType).ToList();
+				//foods = foods.Where(s => s.Type.Name == searchType).ToList();
 			}
 
-			if(viewModel.Cart.Food.Count == 0)
-			{
-				Cart cart = new Cart();
-				viewModel.Cart = cart;
-			}
+			//if(viewModel.Cart.Foods.Count == 0)
+			//{
+			//	Cart cart = new Cart();
+			//	viewModel.Cart = cart;
+			//}
 
 			viewModel.FoodTypes = foodTypes;
 			viewModel.Ingredients = ingredients;
@@ -64,17 +62,11 @@ namespace PizzaPlace.Controllers
 
 		public IActionResult AddToCart(int id)
 		{
-			// Retrieve the album from the database
 			var food = db.Foods.Single(s => s.Id== id);
-
-			// Add it to the shopping cart
-			var cart = ShoppingCart.GetCart(this.HttpContext);
-
-			cart.AddToCart(addedAlbum);
-
-			// Go back to the main store page for more shopping
+			
 			return RedirectToAction("Index");
 		}
+
 
 
 	}

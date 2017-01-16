@@ -11,11 +11,12 @@ namespace PizzaPlace.Entities
 		public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
 
 		public DbSet<Food> Foods { get; set; }
-		public DbSet<FoodType> FoodTypes { get; set; }
-		public DbSet<Ingredient> Ingredients { get; set; }
-		public DbSet<Customer> Customers { get; set; }
 		public DbSet<FoodIngredient> FoodIngredients { get; set; }
-		public DbSet<Cart> Carts { get; set; }
+		public DbSet<Ingredient> Ingredients { get; set; }
+		public DbSet<FoodType> FoodTypes { get; set; }
+		public DbSet<Customer> Customers { get; set; }
+		public DbSet<Order> Orders { get; set; }
+		public DbSet<FoodOrder> FoodOrder { get; set; }
 
 	}
 }

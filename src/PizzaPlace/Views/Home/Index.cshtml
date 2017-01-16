@@ -1,9 +1,12 @@
-﻿@model PizzaPlace.Models.ViewModel
+﻿@model ViewModel
+@{ 
+	var pizzalist = Model.Foods.Where(s => s.FoodType.Type.ToLower() == "pizza");
+}
 
 <html>
 <head>
 	<title></title>
-
+	
 </head>
 <body>
 	<div class="row">
@@ -12,13 +15,13 @@
 			<a asp-controller="Home" asp-action="Index"><h2>Menu</h2></a>
 			@foreach(var item in Model.FoodTypes.OrderBy(s => s.Type))
 			{
-				<a asp-controller="Home" asp-action="Index" asp-route-searchType="@item.Type.ToString()"><h4>@item.Type</h4></a>
+				<a asp-controller="Home" asp-action="Index" asp-route-searchType="@item.ToString()"><h4>@item.Type</h4></a>
 			}
 		</div>
 
 		<div id="mainContent" class="col-md-6">
 			<ul>
-				@foreach(var pizza in Model.Foods.OrderBy(s => s.Type.Type))
+				@foreach(var pizza in Model.Foods.OrderBy(s => s.FoodType.Type))
 				{
 					<li>
 						<a><h3>@pizza.Name</h3></a>
@@ -29,15 +32,15 @@
 				}
 			</ul>
 		</div>
-
+		
 		<div id="rightMenu" class="col-md-4">
 			<form class="form-group" method="post">
 				<div>
-					@foreach(var item in Model.Cart.Food)
+					@*@foreach(var item in Model.)
 					{
-						
-					}
-					<h2>@Model.Cart.TotalCost</h2>
+						@item.Name
+					}*@
+					@*<h2>@Model.Cart.TotalCost</h2>*@
 				</div>
 				<div>
 					<button class="btn" type="submit">CHECKOUT</button>
