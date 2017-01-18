@@ -16,7 +16,7 @@ namespace PizzaPlace.Entities
 		public DbSet<FoodType> FoodTypes { get; set; }
 		public DbSet<Customer> Customers { get; set; }
 		public DbSet<Order> Orders { get; set; }
-		public DbSet<FoodOrder> FoodOrder { get; set; }
-
+		public DbSet<FoodOrder> FoodOrders { get; set; }
+		public DbSet<Role> Roles { get; set; }
 	}
 }

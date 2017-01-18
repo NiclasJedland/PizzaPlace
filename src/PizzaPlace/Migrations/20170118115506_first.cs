@@ -10,27 +10,6 @@ namespace PizzaPlace.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Customers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AccountName = table.Column<string>(nullable: true),
-                    Address = table.Column<string>(nullable: true),
-                    City = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    Phone = table.Column<string>(nullable: true),
-                    Zip = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "FoodTypes",
                 columns: table => new
                 {
@@ -58,24 +37,17 @@ namespace PizzaPlace.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Cost = table.Column<decimal>(nullable: false),
-                    CustomerId = table.Column<int>(nullable: true),
-                    OrderDate = table.Column<DateTime>(nullable: false)
+                    Discount = table.Column<double>(nullable: false),
+                    UserRole = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,6 +68,35 @@ namespace PizzaPlace.Migrations
                         name: "FK_Foods_FoodTypes_FoodTypeId",
                         column: x => x.FoodTypeId,
                         principalTable: "FoodTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AccountName = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true),
+                    Phone = table.Column<string>(nullable: true),
+                    PremiumCoins = table.Column<int>(nullable: false),
+                    RoleId = table.Column<int>(nullable: true),
+                    Zip = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Customers_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -127,7 +128,28 @@ namespace PizzaPlace.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FoodOrder",
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Cost = table.Column<decimal>(nullable: false),
+                    CustomerId = table.Column<int>(nullable: true),
+                    OrderDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FoodOrders",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -138,20 +160,25 @@ namespace PizzaPlace.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FoodOrder", x => x.Id);
+                    table.PrimaryKey("PK_FoodOrders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FoodOrder_Foods_FoodId",
+                        name: "FK_FoodOrders_Foods_FoodId",
                         column: x => x.FoodId,
                         principalTable: "Foods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_FoodOrder_Orders_OrderId",
+                        name: "FK_FoodOrders_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customers_RoleId",
+                table: "Customers",
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Foods_FoodTypeId",
@@ -169,13 +196,13 @@ namespace PizzaPlace.Migrations
                 column: "IngredientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FoodOrder_FoodId",
-                table: "FoodOrder",
+                name: "IX_FoodOrders_FoodId",
+                table: "FoodOrders",
                 column: "FoodId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FoodOrder_OrderId",
-                table: "FoodOrder",
+                name: "IX_FoodOrders_OrderId",
+                table: "FoodOrders",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
@@ -190,7 +217,7 @@ namespace PizzaPlace.Migrations
                 name: "FoodIngredients");
 
             migrationBuilder.DropTable(
-                name: "FoodOrder");
+                name: "FoodOrders");
 
             migrationBuilder.DropTable(
                 name: "Ingredients");
@@ -206,6 +233,9 @@ namespace PizzaPlace.Migrations
 
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
         }
     }
 }

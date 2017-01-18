@@ -15,24 +15,22 @@ namespace PizzaPlace.Models
 			if(db.Foods.Any()) { return; }
 
 			AddToDatabase(db);
-
-			db.SaveChanges();
 		}
 
 		private static void AddToDatabase(DatabaseContext db)
 		{
 			//types
-			var foodTypePizza = new FoodType { Type = "Pizza" };
-			var foodTypeSalad = new FoodType { Type = "Salad" };
-			var foodTypePasta = new FoodType { Type = "Pasta" };
-			var foodTypeOther = new FoodType { Type = "Other" };
+			var typePizza = new FoodType { Type = "Pizza" };
+			var typeSalad = new FoodType { Type = "Salad" };
+			var typePasta = new FoodType { Type = "Pasta" };
+			var typeOther = new FoodType { Type = "Other" };
 
 			//foods
-			var vesuvio = new Food { Name = "Vesuvio", FoodType = foodTypePizza, Description = "", Price = 60 };
-			var calzone = new Food { Name = "Calzone", FoodType = foodTypePizza, Description = "Folded pizza", Price = 70 };
-			var hamsalad = new Food { Name = "Hamsalad", FoodType = foodTypeSalad, Description = "", Price = 80 };
-			var bolognese = new Food { Name = "Bolognese", FoodType = foodTypePasta, Description = "", Price = 85 };
-			var hamburger = new Food { Name = "Cheeseburger", FoodType = foodTypeOther, Description = "", Price = 90 };
+			var foodVesuvio = new Food { Name = "Vesuvio", FoodType = typePizza, Description = "", Price = 60 };
+			var foodCalzone = new Food { Name = "Calzone", FoodType = typePizza, Description = "Folded pizza", Price = 70 };
+			var foodHamsalad = new Food { Name = "Hamsalad", FoodType = typeSalad, Description = "", Price = 80 };
+			var foodBolognese = new Food { Name = "Bolognese", FoodType = typePasta, Description = "", Price = 85 };
+			var foodHamburger = new Food { Name = "Cheeseburger", FoodType = typeOther, Description = "", Price = 90 };
 
 			//ingredients
 			var salad = new Ingredient { IngredientName = "Salad", Price = 5 };
@@ -50,30 +48,30 @@ namespace PizzaPlace.Models
 			//foodingredients
 
 			var foodingredientslist = new List<FoodIngredient> {
-				new FoodIngredient { Food = vesuvio, Ingredient = tomatosauce },
-				new FoodIngredient { Food = vesuvio, Ingredient = cheese },
-				new FoodIngredient { Food = vesuvio, Ingredient = ham },
+				new FoodIngredient { Food = foodVesuvio, Ingredient = tomatosauce },
+				new FoodIngredient { Food = foodVesuvio, Ingredient = cheese },
+				new FoodIngredient { Food = foodVesuvio, Ingredient = ham },
 
-				new FoodIngredient { Food = calzone, Ingredient = tomatosauce },
-				new FoodIngredient { Food = calzone, Ingredient = cheese },
-				new FoodIngredient { Food = calzone, Ingredient = ham },
+				new FoodIngredient { Food = foodCalzone, Ingredient = tomatosauce },
+				new FoodIngredient { Food = foodCalzone, Ingredient = cheese },
+				new FoodIngredient { Food = foodCalzone, Ingredient = ham },
 
-				new FoodIngredient { Food = hamsalad, Ingredient = salad },
-				new FoodIngredient { Food = hamsalad, Ingredient = cheese },
-				new FoodIngredient { Food = hamsalad, Ingredient = onion },
-				new FoodIngredient { Food = hamsalad, Ingredient = tomato },
-				new FoodIngredient { Food = hamsalad, Ingredient = paprika },
-				new FoodIngredient { Food = hamsalad, Ingredient = ham },
+				new FoodIngredient { Food = foodHamsalad, Ingredient = salad },
+				new FoodIngredient { Food = foodHamsalad, Ingredient = cheese },
+				new FoodIngredient { Food = foodHamsalad, Ingredient = onion },
+				new FoodIngredient { Food = foodHamsalad, Ingredient = tomato },
+				new FoodIngredient { Food = foodHamsalad, Ingredient = paprika },
+				new FoodIngredient { Food = foodHamsalad, Ingredient = ham },
 
-				new FoodIngredient { Food = bolognese, Ingredient = mincedmeat },
-				new FoodIngredient { Food = bolognese, Ingredient = pasta },
-				new FoodIngredient { Food = bolognese, Ingredient = onion },
-				new FoodIngredient { Food = bolognese, Ingredient = garlic },
+				new FoodIngredient { Food = foodBolognese, Ingredient = mincedmeat },
+				new FoodIngredient { Food = foodBolognese, Ingredient = pasta },
+				new FoodIngredient { Food = foodBolognese, Ingredient = onion },
+				new FoodIngredient { Food = foodBolognese, Ingredient = garlic },
 
-				new FoodIngredient { Food = hamburger, Ingredient = burger },
-				new FoodIngredient { Food = hamburger, Ingredient = onion },
-				new FoodIngredient { Food = hamburger, Ingredient = tomato },
-				new FoodIngredient { Food = hamburger, Ingredient = salad }
+				new FoodIngredient { Food = foodHamburger, Ingredient = burger },
+				new FoodIngredient { Food = foodHamburger, Ingredient = onion },
+				new FoodIngredient { Food = foodHamburger, Ingredient = tomato },
+				new FoodIngredient { Food = foodHamburger, Ingredient = salad }
 			};
 
 			foreach(var item in foodingredientslist)
@@ -82,8 +80,14 @@ namespace PizzaPlace.Models
 			}
 			db.SaveChanges();
 
+			//roles
+
+			var rolesRegularUser = new Role { Discount = 0.00d, UserRole = UserRole.RegularUser };
+			var rolesPremiumUser = new Role { Discount = 0.20d, UserRole = UserRole.PremiumUser };
+			var rolesAdmin = new Role { Discount = 0.20d, UserRole = UserRole.Admin };
+
 			//customers
-			var zalchion = new Customer
+			var customerZalchion = new Customer
 			{
 				AccountName = "Zalchion",
 				FirstName = "Zalchion",
@@ -93,27 +97,60 @@ namespace PizzaPlace.Models
 				Email = "Zalchion@gmail.com",
 				Password = "123456789",
 				Phone = "000-111222",
-				Zip = "12345"
+				Zip = "12345",
+				Role = rolesAdmin,
+				PremiumCoins = 100
+			};
+
+			var customerNiclas = new Customer
+			{
+				AccountName = "Niclas",
+				FirstName = "Niclas",
+				LastName = "Jedland",
+				Address = "Bruno Liljeforsgatan 39",
+				City = "Uppsala",
+				Email = "niclasjedland@gmail.com",
+				Password = "987654321",
+				Phone = "0736-171353",
+				Zip = "75429",
+				Role = rolesPremiumUser,
+				PremiumCoins = 30
 			};
 
 			//orders
-			var zalorder1 = new Order { Cost = 300, OrderDate = DateTime.Parse("2011-11-11"), Customer = zalchion };
+			var orderZal1 = new Order { OrderDate = DateTime.Parse("2011-11-11"), Customer = customerZalchion }; //300
+			var orderZal2 = new Order { OrderDate = DateTime.Parse("2013-12-24"), Customer = customerZalchion }; //450
+
+			var orderNiclas1 = new Order { OrderDate = DateTime.Parse("2011-11-11"), Customer = customerNiclas }; //360
+			var orderNiclas2 = new Order { OrderDate = DateTime.Parse("2016-11-11"), Customer = customerNiclas }; //455
 
 			//foodorder
-			var zalfoodOrder1 = new FoodOrder { Order = zalorder1, Food = vesuvio, Quantity = 5 };
+			var foodOrderList = new List<FoodOrder>()
+			{
+				new FoodOrder { Order = orderZal1, Food = foodVesuvio, Quantity = 5 },
+				new FoodOrder { Order = orderZal2, Food = foodHamburger, Quantity = 5 },
 
-			db.FoodOrder.Add(zalfoodOrder1);
+				new FoodOrder { Order = orderNiclas1, Food = foodVesuvio, Quantity = 2 },
+				new FoodOrder { Order = orderNiclas1, Food = foodCalzone, Quantity = 1 },
+				new FoodOrder { Order = orderNiclas1, Food = foodBolognese, Quantity = 2 },
 
+				new FoodOrder { Order = orderNiclas2, Food = foodVesuvio, Quantity = 2 },
+				new FoodOrder { Order = orderNiclas2, Food = foodHamsalad, Quantity = 1 },
+				new FoodOrder { Order = orderNiclas2, Food = foodBolognese, Quantity = 3 },
+			};
 
+			//Calculate Cost
+			orderZal1.Cost = foodOrderList.Where(s => s.Order == orderZal1).Sum(s => s.Food.Price * s.Quantity);
+			orderZal2.Cost = foodOrderList.Where(s => s.Order == orderZal2).Sum(s => s.Food.Price * s.Quantity);
 
+			orderNiclas1.Cost = foodOrderList.Where(s => s.Order == orderNiclas1).Sum(s => s.Food.Price * s.Quantity);
+			orderNiclas2.Cost = foodOrderList.Where(s => s.Order == orderNiclas2).Sum(s => s.Food.Price * s.Quantity);
 
-
-
-
-			//---------------------------------------------------
+			foreach(var item in foodOrderList)
+			{
+				db.FoodOrders.Add(item);
+			}
+			db.SaveChanges();
 		}
-
-
-
 	}
 }

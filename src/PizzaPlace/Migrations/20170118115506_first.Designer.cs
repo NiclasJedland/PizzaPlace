@@ -8,7 +8,7 @@ using PizzaPlace.Entities;
 namespace PizzaPlace.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20170116201417_first")]
+    [Migration("20170118115506_first")]
     partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,9 +38,15 @@ namespace PizzaPlace.Migrations
 
                     b.Property<string>("Phone");
 
+                    b.Property<int>("PremiumCoins");
+
+                    b.Property<int?>("RoleId");
+
                     b.Property<string>("Zip");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Customers");
                 });
@@ -100,7 +106,7 @@ namespace PizzaPlace.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("FoodOrder");
+                    b.ToTable("FoodOrders");
                 });
 
             modelBuilder.Entity("PizzaPlace.Entities.FoodType", b =>
@@ -145,6 +151,27 @@ namespace PizzaPlace.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("PizzaPlace.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Discount");
+
+                    b.Property<int>("UserRole");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("PizzaPlace.Entities.Customer", b =>
+                {
+                    b.HasOne("PizzaPlace.Entities.Role", "Role")
+                        .WithMany("Customers")
+                        .HasForeignKey("RoleId");
                 });
 
             modelBuilder.Entity("PizzaPlace.Entities.Food", b =>

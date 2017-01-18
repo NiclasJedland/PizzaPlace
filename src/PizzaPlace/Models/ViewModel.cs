@@ -15,6 +15,7 @@ namespace PizzaPlace.Models
 		public List<FoodType> FoodTypes { get; set; }
 		public List<Ingredient> Ingredients { get; set; }
 		public List<Order> Orders { get; set; }
+		public List<Role> Roles { get; set; }
 
 		public Customer Customer { get; set; }
 		public Food Food { get; set; }
@@ -23,5 +24,6 @@ namespace PizzaPlace.Models
 		public FoodType FoodType { get; set; }
 		public Ingredient Ingredient { get; set; }
 		public Order Order { get; set; }
+		public Role Role { get; set; }
 	}
 }

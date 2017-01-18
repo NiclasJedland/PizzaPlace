@@ -19,36 +19,18 @@ namespace PizzaPlace.Controllers
 		public IActionResult Index(string searchType)
 		{
 			DbInitialize.Seed(db);
+
 			var search = searchType?.Trim().ToLower();
 			var viewModel = new ViewModel();
-			List<FoodType> foodTypes = db.FoodTypes.ToList();
-			List<Ingredient> ingredients = db.Ingredients.ToList();
-			List<Food> foods = db.Foods.ToList();
-			List<Customer> customers = db.Customers.ToList();
-			List<FoodIngredient> foodIngredients = db.FoodIngredients.ToList();
 
-			List<object> objects = new List<object>();
-
-			
-			
-			
-
-			if(!string.IsNullOrEmpty(searchType))
-			{
-				//foods = foods.Where(s => s.Type.Name == searchType).ToList();
-			}
-
-			//if(viewModel.Cart.Foods.Count == 0)
-			//{
-			//	Cart cart = new Cart();
-			//	viewModel.Cart = cart;
-			//}
-
-			viewModel.FoodTypes = foodTypes;
-			viewModel.Ingredients = ingredients;
-			viewModel.Foods = foods;
-			viewModel.Customers = customers;
-			viewModel.FoodIngredients = foodIngredients;
+			viewModel.Customers = db.Customers.ToList();
+			viewModel.Foods = db.Foods.ToList();
+			viewModel.FoodIngredients = db.FoodIngredients.ToList();
+			viewModel.FoodOrders = db.FoodOrders.ToList();
+			viewModel.FoodTypes = db.FoodTypes.ToList();
+			viewModel.Ingredients = db.Ingredients.ToList();
+			viewModel.Orders = db.Orders.ToList();
+			viewModel.Roles = db.Roles.ToList();
 
 			ViewBag.search = "";
 
