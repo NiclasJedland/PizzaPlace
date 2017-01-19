@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace PizzaPlace.Controllers
 {
 	[AllowAnonymous]
+	[Authorize(Policy = "MembersOnly")]
 	public class HomeController : Controller
 	{
 		private DatabaseContext db;
@@ -56,20 +57,9 @@ namespace PizzaPlace.Controllers
 			else
 				ViewBag.disable = "enable";
 
-			var cartitems = db.CartItems.ToList();
-
-
-
-
-			//viewModel.CartItems
-
-
 			return View(viewModel);
 		}
 		
-
-
-		[Authorize(Policy = "MembersOnly")]
 		public IActionResult AddToCart(int? id)
 		{
 			var claim = User.Claims.SingleOrDefault(s => s.Type == claimCustomerId);
@@ -103,7 +93,6 @@ namespace PizzaPlace.Controllers
 			return RedirectToAction("Index");
 		}
 
-		[Authorize(Policy = "MembersOnly")]
 		public IActionResult RemoveFromCart(int id)
 		{
 			var removeCartItem = db.CartItems.SingleOrDefault(s => s.Id == id);
@@ -114,12 +103,25 @@ namespace PizzaPlace.Controllers
 			return RedirectToAction("Index");
 		}
 
-		[Authorize(Policy = "MembersOnly")]
 		public IActionResult ResetCart()
 		{
-			var cartItems = db.CartItems.ToList();
+			var viewModel = new ViewModel();
 
-			foreach(var item in cartItems)
+			viewModel.Customers = db.Customers.ToList();
+			viewModel.Foods = db.Foods.ToList();
+			viewModel.FoodIngredients = db.FoodIngredients.ToList();
+			viewModel.FoodOrders = db.FoodOrders.ToList();
+			viewModel.FoodTypes = db.FoodTypes.ToList();
+			viewModel.Ingredients = db.Ingredients.ToList();
+			viewModel.Orders = db.Orders.ToList();
+			viewModel.Roles = db.Roles.ToList();
+			viewModel.CartItems = db.CartItems.ToList();
+
+			var currentUserId = User.Claims.SingleOrDefault(s => s.Type == "CustomerId");
+			var currentUserCart = viewModel.CartItems.Where(s => s.Customer.Id.ToString() == currentUserId.Value);
+
+
+			foreach(var item in currentUserCart)
 			{
 				db.CartItems.Remove(item);
 			}
@@ -129,11 +131,50 @@ namespace PizzaPlace.Controllers
 			return RedirectToAction("Index");
 		}
 
-		[Authorize(Policy = "MembersOnly")]
 		public IActionResult Checkout()
 		{
-			TempData["Checkout"] = "True";
+			var viewModel = new ViewModel();
 
+			viewModel.Customers = db.Customers.ToList();
+			viewModel.Foods = db.Foods.ToList();
+			viewModel.FoodIngredients = db.FoodIngredients.ToList();
+			viewModel.FoodOrders = db.FoodOrders.ToList();
+			viewModel.FoodTypes = db.FoodTypes.ToList();
+			viewModel.Ingredients = db.Ingredients.ToList();
+			viewModel.Orders = db.Orders.ToList();
+			viewModel.Roles = db.Roles.ToList();
+			viewModel.CartItems = db.CartItems.ToList();
+			
+			var currentUserId = User.Claims.SingleOrDefault(s => s.Type == "CustomerId");
+			var currentUserCart = viewModel.CartItems.Where(s => s.Customer.Id.ToString() == currentUserId.Value);
+			var currentUser = viewModel.Customers.SingleOrDefault(s => s.Id.ToString() == currentUserId.Value);
+			
+			var currentOrderPrice = currentUserCart.OrderBy(s=>s.Food.Price).Sum(s => s.Food.Price);
+			
+			if(currentUser.PremiumCoins >= 100)
+			{
+				currentUser.PremiumCoins -= 100;
+				currentOrderPrice -= currentUserCart.OrderBy(s => s.Food.Price).First().Food.Price;
+			}
+
+			if(currentUser.Role.UserRole == UserRole.PremiumUser || currentUser.Role.UserRole == UserRole.Admin)
+			{	
+				currentUser.PremiumCoins += 10 * currentUserCart.Count();
+				TempData["PremiumCoins"] = "Congratulations you earned " + (10 * currentUserCart.Count()) 
+					+ " premium coins.\nYour total premium coins are: " + currentUser.PremiumCoins;
+				db.Customers.Update(currentUser);
+				db.SaveChanges();
+			}
+
+			var newOrder = new Order();
+			newOrder.Cost = currentOrderPrice * Convert.ToDecimal(currentUser.Role.Discount);
+			newOrder.Customer = currentUser;
+			newOrder.OrderDate = DateTime.Now;
+
+			db.Orders.Add(newOrder);
+			db.SaveChanges();
+
+			TempData["Checkout"] = "True";
 			return RedirectToAction("Index");
 		}
 

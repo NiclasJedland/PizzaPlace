@@ -1,17 +1,10 @@
-﻿@using System.Security.Claims;
+﻿@model ViewModel
 
-@model ViewModel
-@{ 
-	var currentUserId = User.Claims.SingleOrDefault(s => s.Type == "CustomerId");
-	var currentUser = Model.Customers.SingleOrDefault(s => s.Id.ToString() == currentUserId?.Value);
-	var currentCart = currentUser.CartItems.Where(s => s.);
-}
 <html>
 <head>
 	<title></title>
-
 </head>
-<body>	
+<body>
 	<div class="row">
 		<div id="leftMenu" class="col-md-2">
 			<a asp-controller="Home" asp-action="Index"><h2>Menu</h2></a>
@@ -57,64 +50,119 @@
 							<th class="col-md-4 text-center">COST</th>
 							<td class="col-md-1"></td>
 						</tr>
-						@*@foreach(var item in Model.CartItems.OrderBy(s => s.Food.Name))*@
-						@foreach(var item in Model.CartItems.OrderBy(s => s.Food.Name))
+						@if(User.Identities.Any(s => s.IsAuthenticated))
 						{
+							var currentUserId = User.Claims.SingleOrDefault(s => s.Type == "CustomerId");
+							var currentUserCart = Model.CartItems.Where(s => s.Customer.Id.ToString() == currentUserId.Value);
+							var currentUser = Model.Customers.SingleOrDefault(s => s.Id.ToString() == currentUserId.Value);
+
+							@if((currentUser.PremiumCoins >= 100) && (currentUserCart.Count() > 0))
+							{ 
+								var firstItem = currentUserCart.OrderBy(s => s.Food.Price).First();
+								<tr>
+									<td class="text-right col-md-7">@firstItem.Food.Name</td>
+									<td class="col-md-4">0.00</td>
+									<td>
+										<a class="glyphicon glyphicon-remove col-md-1" asp-controller="Home" asp-action="RemoveFromCart" asp-route-id="@firstItem.Id"></a>
+									</td>
+								</tr>
+								@foreach(var item in currentUserCart.Skip(1).OrderBy(s => s.Food.Price))
+								{
+									<tr>
+										<td class="text-right col-md-7">@item.Food.Name</td>
+										<td class="col-md-4">@item.Food.Price</td>
+										<td>
+											<a class="glyphicon glyphicon-remove col-md-1" asp-controller="Home" asp-action="RemoveFromCart" asp-route-id="@item.Id"></a>
+										</td>
+									</tr>
+								}
+							}
+							else
+							{
+								@foreach(var item in currentUserCart.OrderBy(s => s.Food.Price))
+								{
+									<tr>
+										<td class="text-right col-md-7">@item.Food.Name</td>
+										<td class="col-md-4">@item.Food.Price</td>
+										<td>
+											<a class="glyphicon glyphicon-remove col-md-1" asp-controller="Home" asp-action="RemoveFromCart" asp-route-id="@item.Id"></a>
+										</td>
+									</tr>
+								}
+							}
 							<tr>
-								<td class="text-right col-md-7">@item.Food.Name</td>
-								<td class="col-md-4">@item.Food.Price</td>
-								<td>
-									<a class="glyphicon glyphicon-remove col-md-1" asp-controller="Home" asp-action="RemoveFromCart" asp-route-id="@item.Id"></a>
-								</td>
+								<td class="text-right lead text-uppercase">Total cost:</td>
+								@if(currentUser.PremiumCoins >= 100)
+								{
+									@if((currentUser.Role.UserRole == PizzaPlace.Entities.UserRole.PremiumUser || currentUser.Role.UserRole == PizzaPlace.Entities.UserRole.Admin) && currentUserCart.Count() > 2)
+									{
+										<td class="lead">
+											@((currentUserCart.Skip(1).Sum(s => s.Food.Price) * Convert.ToDecimal(currentUser.Role.Discount)).ToString("N2"))
+										</td>
+									}
+									else
+									{
+										<td class="lead">@(currentUserCart.Skip(1).Sum(s => s.Food.Price).ToString("N2"))</td>
+									}
+								}
+								else
+								{
+									@if((currentUser.Role.UserRole == PizzaPlace.Entities.UserRole.PremiumUser || currentUser.Role.UserRole == PizzaPlace.Entities.UserRole.Admin) && currentUserCart.Count() > 2)
+									{
+										<td class="lead">
+											@((currentUserCart.Sum(s => s.Food.Price) * Convert.ToDecimal(currentUser.Role.Discount)).ToString("N2"))
+										</td>
+									}
+									else
+									{
+										<td class="lead">@(currentUserCart.Sum(s => s.Food.Price).ToString("N2"))</td>
+									}
+								}
 							</tr>
 						}
-						<tr>
-							<td class="text-right lead text-uppercase">Total cost:</td>
-							<td class="lead">@Model.CartItems.Sum(s => s.Food.Price)</td>
-						</tr>						
 					</table>
 				</div>
 				<div>
-					@if(Model.CartItems.Count > 0)
+					@if(User.Identities.Any(s => s.IsAuthenticated))
 					{
-						@if(User.Identities.Any(s => s.IsAuthenticated))
+						var currentUserId = User.Claims.SingleOrDefault(s => s.Type == "CustomerId");
+						var currentUserCart = Model.CartItems.Where(s => s.Customer.Id.ToString() == currentUserId.Value);						
+						@if(currentUserCart.Count() > 0)
 						{
 							<button id="checkoutButton" class="btn btn-info" asp-controller="Home" asp-action="Checkout">CHECKOUT</button>
+							<button class="btn btn-warning" asp-controller="Home" asp-action="ResetCart">RESET</button>
 						}
 						else
 						{
-							<a class="btn btn-info" asp-controller="Account" asp-action="Login">CHECKOUT</a>
+							<button id="checkoutButton" disabled class="btn btn-info" asp-controller="Home" asp-action="Checkout">CHECKOUT</button>
+							<button disabled class="btn btn-warning" asp-controller="Home" asp-action="ResetCart">RESET</button>
 						}
 					}
 					else
 					{
-						<button class="btn btn-info" asp-controller="Home" asp-action="Checkout" disabled>CHECKOUT</button>
-					}
-					<button class="btn btn-warning" asp-controller="Home" asp-action="ResetCart">RESET</button>
+						<a class="btn btn-info" asp-controller="Account" asp-action="Login">CHECKOUT</a>
+						<a class="btn btn-info" asp-controller="Account" asp-action="Login">RESET</a>					}
 				</div>
 			</form>
-
 		</div>
 	</div>
 	@if(TempData["Checkout"] != null)
 	{
-		@if(TempData["Checkout"].ToString() == "True")
-		{
-			<div id="checkout">
-				<div class="alert alert-danger alert-dismissable fade in text-center">
-					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-					<strong id="DbFont">Thank you for ordering!</strong>
-				</div>
+		<div id="checkout">
+			<div class="alert alert-danger alert-dismissable fade in text-center">
+				<a asp-controller="Home" asp-action="ResetCart" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<h1>Thank you for ordering!</h1>
+				@if(TempData["PremiumCoins"] != null)
+				{
+					<h3>@TempData["PremiumCoins"]</h3>
+				}
+				else
+				{
+					<h3>Paying for premium will grant you 10 premium coins for every item in your order!</h3>
+				}
+				<h3>When you have 100 or more premium coins you will get your cheapest pizza for free!</h3>
 			</div>
-		}
+		</div>
 	}
-
-	<div>
-		<h1>
-			CurrentUserId: @currentUserId <br />
-			CurrentUser: @currentUser <br />
-			@*CurrentUserCart: @currentUserCart*@
-		</h1>
-	</div>
 </body>
 </html>

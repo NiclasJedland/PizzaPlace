@@ -82,9 +82,9 @@ namespace PizzaPlace.Models
 
 			//roles
 
-			var rolesRegularUser = new Role { Discount = 0.00d, UserRole = UserRole.RegularUser };
-			var rolesPremiumUser = new Role { Discount = 0.20d, UserRole = UserRole.PremiumUser };
-			var rolesAdmin = new Role { Discount = 0.20d, UserRole = UserRole.Admin };
+			var rolesRegularUser = new Role { Discount = 1.00d, UserRole = UserRole.RegularUser };
+			var rolesPremiumUser = new Role { Discount = 0.80d, UserRole = UserRole.PremiumUser };
+			var rolesAdmin = new Role { Discount = 0.80d, UserRole = UserRole.Admin };
 
 			//customers
 			var customerZalchion = new Customer

@@ -86,8 +86,7 @@ body {
 	top: 25%;
 	left: 35%;
 	width: 30%;
-	height: 20%;
-
+	height: 40%;
 }
 #checkout div{
 	width: 100%;
@@ -97,10 +96,4 @@ body {
 }
 #checkout div strong{
 	vertical-align: auto;
-}
-
-
-div.growlUI { background: url(check48.png) no-repeat 10px 10px }
-div.growlUI h1, div.growlUI h2 {
-    color: white; padding: 5px 5px 5px 75px; text-align: left
 }
