@@ -8,14 +8,34 @@ using PizzaPlace.Entities;
 namespace PizzaPlace.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20170118115506_first")]
-    partial class first
+    [Migration("20170118184134_removedquantity")]
+    partial class removedquantity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("PizzaPlace.Entities.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("CustomerId");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<int?>("FoodId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("FoodId");
+
+                    b.ToTable("CartItems");
+                });
 
             modelBuilder.Entity("PizzaPlace.Entities.Customer", b =>
                 {
@@ -165,6 +185,17 @@ namespace PizzaPlace.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("PizzaPlace.Entities.CartItem", b =>
+                {
+                    b.HasOne("PizzaPlace.Entities.Customer")
+                        .WithMany("CartItems")
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("PizzaPlace.Entities.Food", "Food")
+                        .WithMany()
+                        .HasForeignKey("FoodId");
                 });
 
             modelBuilder.Entity("PizzaPlace.Entities.Customer", b =>

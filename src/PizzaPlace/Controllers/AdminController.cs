@@ -3,17 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using PizzaPlace.Entities;
+using Microsoft.AspNetCore.Authorization;
 
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace PizzaPlace.Controllers
 {
-    public class AdminController : Controller
+	[Authorize(Policy = "AdministratorOnly")]
+	[Authorize(Policy = "MembersOnly")]
+	public class AdminController : Controller
     {
-        // GET: /<controller>/
-        public IActionResult Index()
-        {
-            return View();
-        }
-    }
+		private DatabaseContext db;
+		public AdminController(DatabaseContext _context)
+		{
+			db = _context;
+		}
+
+		public IActionResult Index()
+		{
+			return View();
+		}
+
+
+		public IActionResult Admin()
+		{
+
+
+			return View();
+		}
+	}
 }

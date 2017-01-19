@@ -117,12 +117,29 @@ namespace PizzaPlace.Models
 				PremiumCoins = 30
 			};
 
-			//orders
-			var orderZal1 = new Order { OrderDate = DateTime.Parse("2011-11-11"), Customer = customerZalchion }; //300
-			var orderZal2 = new Order { OrderDate = DateTime.Parse("2013-12-24"), Customer = customerZalchion }; //450
+			var customerRandom = new Customer
+			{
+				AccountName = "RandomAccount",
+				FirstName = "RandomFirstName",
+				LastName = "RandomLastName",
+				Address = "RandomAddress",
+				City = "RandomCity",
+				Email = "Random@random.random",
+				Password = "RandomPassword",
+				Phone = "RandomPhone",
+				Zip = "RandomZip",
+				Role = rolesRegularUser,
+				PremiumCoins = 0
+			};
 
-			var orderNiclas1 = new Order { OrderDate = DateTime.Parse("2011-11-11"), Customer = customerNiclas }; //360
-			var orderNiclas2 = new Order { OrderDate = DateTime.Parse("2016-11-11"), Customer = customerNiclas }; //455
+			//orders
+			var orderZal1 = new Order { OrderDate = DateTime.Parse("2011-11-11"), Customer = customerZalchion }; 
+			var orderZal2 = new Order { OrderDate = DateTime.Parse("2013-12-24"), Customer = customerZalchion }; 
+
+			var orderNiclas1 = new Order { OrderDate = DateTime.Parse("2011-11-11"), Customer = customerNiclas }; 
+			var orderNiclas2 = new Order { OrderDate = DateTime.Parse("2016-11-11"), Customer = customerNiclas };
+
+			var orderRandom1 = new Order { OrderDate = DateTime.Parse("1000-10-10"), Customer = customerRandom };
 
 			//foodorder
 			var foodOrderList = new List<FoodOrder>()
@@ -137,6 +154,8 @@ namespace PizzaPlace.Models
 				new FoodOrder { Order = orderNiclas2, Food = foodVesuvio, Quantity = 2 },
 				new FoodOrder { Order = orderNiclas2, Food = foodHamsalad, Quantity = 1 },
 				new FoodOrder { Order = orderNiclas2, Food = foodBolognese, Quantity = 3 },
+
+				new FoodOrder { Order = orderRandom1, Food = foodHamsalad, Quantity = 10 }
 			};
 
 			//Calculate Cost
@@ -145,6 +164,8 @@ namespace PizzaPlace.Models
 
 			orderNiclas1.Cost = foodOrderList.Where(s => s.Order == orderNiclas1).Sum(s => s.Food.Price * s.Quantity);
 			orderNiclas2.Cost = foodOrderList.Where(s => s.Order == orderNiclas2).Sum(s => s.Food.Price * s.Quantity);
+
+			orderRandom1.Cost = foodOrderList.Where(s => s.Order == orderRandom1).Sum(s => s.Food.Price * s.Quantity);
 
 			foreach(var item in foodOrderList)
 			{

@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,16 +29,30 @@ namespace PizzaPlace
 
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-			// Add framework services.
+			services.AddMemoryCache();
+
+			services.AddSession( o => {
+				o.CookieName = "Tomasos";
+				o.CookieHttpOnly = true;
+				o.IdleTimeout = TimeSpan.FromDays(1);
+			});
+
+			services.AddAuthorization(options =>
+			{
+				options.AddPolicy("AdministratorOnly", policy => policy.RequireRole("Admin"));
+				options.AddPolicy("MembersOnly", policy => policy.RequireClaim("Member", "RegularUser", "PremiumUser", "Admin"));
+			});
+
 			services.AddDbContext<DatabaseContext>(s => s.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+			
+			services.AddMvc(config => {
+				var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+				config.Filters.Add(new AuthorizeFilter(policy));
+			});
+		}
 
-			services.AddMvc();
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -47,16 +64,21 @@ namespace PizzaPlace
                 app.UseBrowserLink();
             }
 
-            app.UseStaticFiles();
+			app.UseCookieAuthentication(new CookieAuthenticationOptions()
+			{
+				AuthenticationScheme = "LoginCookie",
+				ExpireTimeSpan = TimeSpan.FromSeconds(10),
+				LoginPath = new PathString("/Account/Login/"),
+				AccessDeniedPath = new PathString("/Account/Forbidden/"),
+				AutomaticAuthenticate = true,
+				AutomaticChallenge = true
+			});
+
+			app.UseStaticFiles();
+
+			app.UseSession();
 
 			app.UseMvcWithDefaultRoute();
-
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
-            //});
         }
     }
 }

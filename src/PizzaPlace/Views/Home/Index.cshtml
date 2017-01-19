@@ -1,56 +1,120 @@
-﻿@model ViewModel
-@{ 
-	var pizzalist = Model.Foods.Where(s => s.FoodType.Type.ToLower() == "pizza");
-}
+﻿@using System.Security.Claims;
 
+@model ViewModel
+@{ 
+	var currentUserId = User.Claims.SingleOrDefault(s => s.Type == "CustomerId");
+	var currentUser = Model.Customers.SingleOrDefault(s => s.Id.ToString() == currentUserId?.Value);
+	var currentCart = currentUser.CartItems.Where(s => s.);
+}
 <html>
 <head>
 	<title></title>
-	
-</head>
-<body>
-	<div class="row">
 
+</head>
+<body>	
+	<div class="row">
 		<div id="leftMenu" class="col-md-2">
 			<a asp-controller="Home" asp-action="Index"><h2>Menu</h2></a>
 			@foreach(var item in Model.FoodTypes.OrderBy(s => s.Type))
 			{
-				<a asp-controller="Home" asp-action="Index" asp-route-searchType="@item.ToString()"><h4>@item.Type</h4></a>
+				<a asp-controller="Home" asp-action="Index" asp-route-searchType="@item.Type"><h4>@item.Type</h4></a>
 			}
 		</div>
-
 		<div id="mainContent" class="col-md-6">
 			<ul>
-				@foreach(var pizza in Model.Foods.OrderBy(s => s.FoodType.Type))
+				@if(!string.IsNullOrEmpty(ViewBag.search))
 				{
-					<li>
-						<a><h3>@pizza.Name</h3></a>
-						<span class="ingredients">
-							@String.Join(", ", pizza.FoodIngredients.Select(s => s.Ingredient.IngredientName).ToList())
-						</span>
-					</li>
+					@foreach(var item in Model.Foods.OrderBy(s => s.FoodType.Type).Where(s => s.FoodType.Type == ViewBag.search))
+					{
+						<li>
+							<a asp-controller="Home" asp-action="AddToCart" asp-route-id="@item.Id"><h3>@item.Name</h3></a>
+							<span class="ingredients">
+								@String.Join(", ", item.FoodIngredients.OrderBy(s => s.Ingredient.IngredientName).Select(s => s.Ingredient.IngredientName).ToList())
+							</span>
+						</li>
+					}
+				}
+				else
+				{
+					@foreach(var item in Model.Foods.OrderBy(s => s.FoodType.Type))
+					{
+						<li>
+							<a asp-controller="Home" asp-action="AddToCart" asp-route-id="@item.Id"><h3>@item.Name</h3></a>
+							<span class="ingredients">
+								@String.Join(", ", item.FoodIngredients.OrderBy(s => s.Ingredient.IngredientName).Select(s => s.Ingredient.IngredientName).ToList())
+							</span>
+						</li>
+					}
 				}
 			</ul>
 		</div>
-		
 		<div id="rightMenu" class="col-md-4">
 			<form class="form-group" method="post">
 				<div>
-					@*@foreach(var item in Model.)
-					{
-						@item.Name
-					}*@
-					@*<h2>@Model.Cart.TotalCost</h2>*@
+					<table class="row table table-bordered table-hover lead">
+						<tr>
+							<th class="text-right col-md-7 ">ITEM</th>
+							<th class="col-md-4 text-center">COST</th>
+							<td class="col-md-1"></td>
+						</tr>
+						@*@foreach(var item in Model.CartItems.OrderBy(s => s.Food.Name))*@
+						@foreach(var item in Model.CartItems.OrderBy(s => s.Food.Name))
+						{
+							<tr>
+								<td class="text-right col-md-7">@item.Food.Name</td>
+								<td class="col-md-4">@item.Food.Price</td>
+								<td>
+									<a class="glyphicon glyphicon-remove col-md-1" asp-controller="Home" asp-action="RemoveFromCart" asp-route-id="@item.Id"></a>
+								</td>
+							</tr>
+						}
+						<tr>
+							<td class="text-right lead text-uppercase">Total cost:</td>
+							<td class="lead">@Model.CartItems.Sum(s => s.Food.Price)</td>
+						</tr>						
+					</table>
 				</div>
 				<div>
-					<button class="btn" type="submit">CHECKOUT</button>
-					<button class="btn" type="reset">RESET</button>
+					@if(Model.CartItems.Count > 0)
+					{
+						@if(User.Identities.Any(s => s.IsAuthenticated))
+						{
+							<button id="checkoutButton" class="btn btn-info" asp-controller="Home" asp-action="Checkout">CHECKOUT</button>
+						}
+						else
+						{
+							<a class="btn btn-info" asp-controller="Account" asp-action="Login">CHECKOUT</a>
+						}
+					}
+					else
+					{
+						<button class="btn btn-info" asp-controller="Home" asp-action="Checkout" disabled>CHECKOUT</button>
+					}
+					<button class="btn btn-warning" asp-controller="Home" asp-action="ResetCart">RESET</button>
 				</div>
 			</form>
+
 		</div>
 	</div>
+	@if(TempData["Checkout"] != null)
+	{
+		@if(TempData["Checkout"].ToString() == "True")
+		{
+			<div id="checkout">
+				<div class="alert alert-danger alert-dismissable fade in text-center">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong id="DbFont">Thank you for ordering!</strong>
+				</div>
+			</div>
+		}
+	}
 
-
-
+	<div>
+		<h1>
+			CurrentUserId: @currentUserId <br />
+			CurrentUser: @currentUser <br />
+			@*CurrentUserCart: @currentUserCart*@
+		</h1>
+	</div>
 </body>
 </html>

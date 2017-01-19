@@ -81,3 +81,26 @@ body {
 	text-align: center;
 	text-decoration: underline;
 }
+#checkout{
+	position: absolute;
+	top: 25%;
+	left: 35%;
+	width: 30%;
+	height: 20%;
+
+}
+#checkout div{
+	width: 100%;
+	height: 100%;
+	font-size: 35px;
+	vertical-align: auto;
+}
+#checkout div strong{
+	vertical-align: auto;
+}
+
+
+div.growlUI { background: url(check48.png) no-repeat 10px 10px }
+div.growlUI h1, div.growlUI h2 {
+    color: white; padding: 5px 5px 5px 75px; text-align: left
+}
