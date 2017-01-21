@@ -57,7 +57,7 @@
 							var currentUser = Model.Customers.SingleOrDefault(s => s.Id.ToString() == currentUserId.Value);
 
 							@if((currentUser.PremiumCoins >= 100) && (currentUserCart.Count() > 0))
-							{ 
+							{
 								var firstItem = currentUserCart.OrderBy(s => s.Food.Price).First();
 								<tr>
 									<td class="text-right col-md-7">@firstItem.Food.Name</td>
@@ -126,7 +126,7 @@
 					@if(User.Identities.Any(s => s.IsAuthenticated))
 					{
 						var currentUserId = User.Claims.SingleOrDefault(s => s.Type == "CustomerId");
-						var currentUserCart = Model.CartItems.Where(s => s.Customer.Id.ToString() == currentUserId.Value);						
+						var currentUserCart = Model.CartItems.Where(s => s.Customer.Id.ToString() == currentUserId.Value);
 						@if(currentUserCart.Count() > 0)
 						{
 							<button id="checkoutButton" class="btn btn-info" asp-controller="Home" asp-action="Checkout">CHECKOUT</button>
@@ -141,7 +141,8 @@
 					else
 					{
 						<a class="btn btn-info" asp-controller="Account" asp-action="Login">CHECKOUT</a>
-						<a class="btn btn-info" asp-controller="Account" asp-action="Login">RESET</a>					}
+						<a class="btn btn-info" asp-controller="Account" asp-action="Login">RESET</a>
+					}
 				</div>
 			</form>
 		</div>
@@ -154,11 +155,11 @@
 				<h1>Thank you for ordering!</h1>
 				@if(TempData["PremiumCoins"] != null)
 				{
-					<h3>@TempData["PremiumCoins"]</h3>
+				<h3>@TempData["PremiumCoins"]</h3>
 				}
 				else
 				{
-					<h3>Paying for premium will grant you 10 premium coins for every item in your order!</h3>
+				<h3>Paying for premium will grant you 10 premium coins for every item in your order!</h3>
 				}
 				<h3>When you have 100 or more premium coins you will get your cheapest pizza for free!</h3>
 			</div>

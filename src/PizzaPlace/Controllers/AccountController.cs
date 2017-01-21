@@ -60,8 +60,7 @@ namespace PizzaPlace.Controllers
 					IsPersistent = true,
 					AllowRefresh = true
 			});
-
-			//return RedirectToLocal(returnUrl);
+			
 			return RedirectToAction("Index", "Home");
 		}
 		

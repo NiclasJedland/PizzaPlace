@@ -36,19 +36,9 @@ namespace PizzaPlace.Controllers
 		{
 			DbInitialize.Seed(db);
 
-			var viewModel = new ViewModel();
-
 			var search = searchType?.Trim().ToLower();
 
-			viewModel.Customers = db.Customers.ToList();
-			viewModel.Foods = db.Foods.ToList();
-			viewModel.FoodIngredients = db.FoodIngredients.ToList();
-			viewModel.FoodOrders = db.FoodOrders.ToList();
-			viewModel.FoodTypes = db.FoodTypes.ToList();
-			viewModel.Ingredients = db.Ingredients.ToList();
-			viewModel.Orders = db.Orders.ToList();
-			viewModel.Roles = db.Roles.ToList();
-			viewModel.CartItems = db.CartItems.ToList();
+			var viewModel = ViewModel.GetAllDbItems(db);
 
 			ViewBag.search = searchType;
 
@@ -66,17 +56,7 @@ namespace PizzaPlace.Controllers
 		
 			if(claim != null)
 			{
-				var viewModel = new ViewModel();
-
-				viewModel.Customers = db.Customers.ToList();
-				viewModel.Foods = db.Foods.ToList();
-				viewModel.FoodIngredients = db.FoodIngredients.ToList();
-				viewModel.FoodOrders = db.FoodOrders.ToList();
-				viewModel.FoodTypes = db.FoodTypes.ToList();
-				viewModel.Ingredients = db.Ingredients.ToList();
-				viewModel.Orders = db.Orders.ToList();
-				viewModel.Roles = db.Roles.ToList();
-				viewModel.CartItems = db.CartItems.ToList();
+				var viewModel = ViewModel.GetAllDbItems(db);
 
 				var newFood = viewModel.Foods.FirstOrDefault(s => s.Id == id);
 
@@ -105,17 +85,7 @@ namespace PizzaPlace.Controllers
 
 		public IActionResult ResetCart()
 		{
-			var viewModel = new ViewModel();
-
-			viewModel.Customers = db.Customers.ToList();
-			viewModel.Foods = db.Foods.ToList();
-			viewModel.FoodIngredients = db.FoodIngredients.ToList();
-			viewModel.FoodOrders = db.FoodOrders.ToList();
-			viewModel.FoodTypes = db.FoodTypes.ToList();
-			viewModel.Ingredients = db.Ingredients.ToList();
-			viewModel.Orders = db.Orders.ToList();
-			viewModel.Roles = db.Roles.ToList();
-			viewModel.CartItems = db.CartItems.ToList();
+			var viewModel = ViewModel.GetAllDbItems(db);
 
 			var currentUserId = User.Claims.SingleOrDefault(s => s.Type == "CustomerId");
 			var currentUserCart = viewModel.CartItems.Where(s => s.Customer.Id.ToString() == currentUserId.Value);
@@ -133,17 +103,7 @@ namespace PizzaPlace.Controllers
 
 		public IActionResult Checkout()
 		{
-			var viewModel = new ViewModel();
-
-			viewModel.Customers = db.Customers.ToList();
-			viewModel.Foods = db.Foods.ToList();
-			viewModel.FoodIngredients = db.FoodIngredients.ToList();
-			viewModel.FoodOrders = db.FoodOrders.ToList();
-			viewModel.FoodTypes = db.FoodTypes.ToList();
-			viewModel.Ingredients = db.Ingredients.ToList();
-			viewModel.Orders = db.Orders.ToList();
-			viewModel.Roles = db.Roles.ToList();
-			viewModel.CartItems = db.CartItems.ToList();
+			var viewModel = ViewModel.GetAllDbItems(db);
 			
 			var currentUserId = User.Claims.SingleOrDefault(s => s.Type == "CustomerId");
 			var currentUserCart = viewModel.CartItems.Where(s => s.Customer.Id.ToString() == currentUserId.Value);
@@ -167,7 +127,11 @@ namespace PizzaPlace.Controllers
 			}
 
 			var newOrder = new Order();
-			newOrder.Cost = currentOrderPrice * Convert.ToDecimal(currentUser.Role.Discount);
+			if(currentUserCart.Count() > 2)
+				newOrder.Cost = currentOrderPrice * Convert.ToDecimal(currentUser.Role.Discount);			
+			else
+				newOrder.Cost = currentOrderPrice;
+
 			newOrder.Customer = currentUser;
 			newOrder.OrderDate = DateTime.Now;
 

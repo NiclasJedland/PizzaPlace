@@ -8,9 +8,10 @@ using PizzaPlace.Entities;
 namespace PizzaPlace.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20170120091542_alternatekey")]
+    partial class alternatekey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -96,14 +97,11 @@ namespace PizzaPlace.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(2000);
+                    b.Property<string>("Description");
 
                     b.Property<int?>("FoodTypeId");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<string>("Name");
 
                     b.Property<decimal>("Price");
 
@@ -157,9 +155,7 @@ namespace PizzaPlace.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<string>("Type");
 
                     b.HasKey("Id");
 
@@ -171,9 +167,7 @@ namespace PizzaPlace.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("IngredientName")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<string>("IngredientName");
 
                     b.Property<decimal>("Price");
 

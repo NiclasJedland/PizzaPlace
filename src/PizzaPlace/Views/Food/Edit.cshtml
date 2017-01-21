@@ -1,0 +1,98 @@
+﻿@using System.Collections.Generic
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@model ViewModel
+@{
+	ViewBag.Title = "Food Edit";
+}
+<h2>@ViewBag.Title</h2>
+<a asp-controller="Food" asp-action="Index">Back to Foods</a>
+
+<div class="row">
+	<div class="col-md-8">
+		<section>
+			<form asp-controller="Food" asp-action="Edit" method="post" class="form form-horizontal">
+				<h3>Customer id: @Model.Food.Id</h3><hr />
+				<div hidden>
+					<label class="col-md-2" asp-for="Food.Id"></label>
+					<input readonly="readonly" asp-for="Food.Id" />
+					<span asp-validation-for="Food.Id" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label" asp-for="Food.Name"></label>
+					<div class="col-md-10">
+
+						<input asp-for="Food.Name" class="form-control" />
+						<span asp-validation-for="Food.Name" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label" asp-for="Food.Price"></label>
+					<div class="col-md-10">
+
+						<input asp-for="Food.Price" class="form-control" />
+						<span asp-validation-for="Food.Price" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label" asp-for="Food.Description"></label>
+					<div class="col-md-10">
+
+						<input asp-for="Food.Description" class="form-control" />
+						<span asp-validation-for="Food.Description" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label asp-for="Food.FoodType" class="col-md-2 control-label"></label>
+					<div class="col-md-10">
+						@foreach(var item in Model.FoodTypes)
+						{
+							@if(item.Type == Model.Food.FoodType.Type)
+							{
+								<label>
+									<input checked type="radio" asp-for="FoodType.Type" value="@item.Type" /> @item.Type
+								</label>
+							}
+							else
+							{
+								<label>
+									<input type="radio" asp-for="FoodType.Type" value="@item.Type" /> @item.Type
+								</label>
+							}
+						}
+						<span asp-validation-for="Food.FoodType" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label asp-for="Food.FoodIngredients" class="col-md-2 control-label"></label>
+					<div class="col-md-10">
+						@foreach(var item in Model.Ingredients.OrderBy(s => s.IngredientName))
+						{
+							if(Model.Food.FoodIngredients.Select(s => s.Ingredient.Id).Any(s => s == item.Id))
+							{
+								<label>
+									<input checked type="checkbox" name="ingredients" value="@item.Id" /> @item.IngredientName
+								</label>
+							}
+							else
+							{
+								<label>
+									<input type="checkbox" name="ingredients" value="@item.Id" /> @item.IngredientName
+								</label>
+							}
+						}
+						<span asp-validation-for="Food.FoodIngredients" class="text-danger"></span>
+					</div>
+				</div>
+				<div>
+					<button type="submit">Save</button>
+				</div>
+			</form>
+		</section>
+	</div>
+</div>
+@section Scripts {
+	@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

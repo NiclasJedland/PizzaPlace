@@ -41,7 +41,7 @@ namespace PizzaPlace
 
 			services.AddAuthorization(options =>
 			{
-				options.AddPolicy("AdministratorOnly", policy => policy.RequireRole("Admin"));
+				options.AddPolicy("AdministratorOnly", policy => policy.RequireClaim("Member", "Admin"));
 				options.AddPolicy("MembersOnly", policy => policy.RequireClaim("Member", "RegularUser", "PremiumUser", "Admin"));
 			});
 

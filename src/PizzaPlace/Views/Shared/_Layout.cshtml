@@ -25,7 +25,7 @@
 				<ul class="nav navbar-nav">
 					@if(User.Identities.Any(s => s.IsAuthenticated && s.Claims.Any(d => d.Value == "Admin")))
 					{
-						<li><a asp-controller="Admin" asp-action="Admin">Admin</a></li>
+						<li><a asp-controller="Admin" asp-action="Index">Admin</a></li>
 					}
 					@if(User.Identities.Any(s => s.IsAuthenticated))
 					{

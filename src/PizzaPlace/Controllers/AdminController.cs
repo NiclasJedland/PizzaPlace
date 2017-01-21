@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace PizzaPlace.Controllers
 {
 	[Authorize(Policy = "AdministratorOnly")]
-	[Authorize(Policy = "MembersOnly")]
 	public class AdminController : Controller
     {
 		private DatabaseContext db;
@@ -18,17 +17,9 @@ namespace PizzaPlace.Controllers
 		{
 			db = _context;
 		}
-
+		
 		public IActionResult Index()
 		{
-			return View();
-		}
-
-
-		public IActionResult Admin()
-		{
-
-
 			return View();
 		}
 	}

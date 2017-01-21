@@ -1,0 +1,64 @@
+﻿@model ViewModel
+@{
+	ViewBag.Title = "Food Index";
+}
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+	<div class="col-md-6">
+		<a asp-controller="Admin" asp-action="Index">Back to Admin</a>
+	</div>
+	<div class="col-md-6 text-right">
+		<a asp-controller="Food" asp-action="Create">Create New Food</a>
+	</div>
+</div>
+
+<div class="row">
+	<div col-md-12>
+		<table class="table table-bordered table-hover table-striped text-center">
+			<tr>
+				<th>
+					<label asp-for="Food.Name"></label>
+				</th>
+				<th>
+					<label asp-for="Food.Price"></label>
+				</th>
+				<th>
+					<label asp-for="Food.Description"></label>
+				</th>
+				<th>
+					<label asp-for="Food.FoodType.Type"></label>
+				</th>
+				<th>
+					<label asp-for="Ingredient.IngredientName"></label>
+				</th>
+				<th></th>
+			</tr>
+
+			@foreach(var item in Model.Foods)
+			{
+				<tr>
+					<td>
+						@item.Name
+					</td>
+					<td>
+						@item.Price
+					</td>
+					<td>
+						@item.Description
+					</td>
+					<td>
+						@item.FoodType.Type
+					</td>
+					<td>
+						@String.Join(", ", item.FoodIngredients.OrderBy(s => s.Ingredient.IngredientName).Select(s => s.Ingredient.IngredientName).ToList())
+					</td>
+					<td>
+						<a asp-controller="Food" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+						<a asp-controller="Food" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+					</td>
+				</tr>
+			}
+		</table>
+	</div>
+</div>

@@ -1,1 +1,23 @@
-﻿
+﻿@model ViewModel
+@{
+	ViewBag.Title = "Admin";
+}
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title></title>
+</head>
+<body>
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Tomasos Admin</h1><br />
+			<a asp-controller="Customer" asp-action="Index">Customers</a><br /><br />
+			<a asp-controller="Food" asp-action="Index">Food</a><br /><br />
+			<a asp-controller="Ingredient" asp-action="Index">Ingredient</a><br /><br />
+			<a asp-controller="FoodType" asp-action="Index">FoodTypes</a><br /><br />
+			<a asp-controller="Role" asp-action="Index">Roles</a><br /><br />
+		</div>
+	</div>
+</body>
+</html>

@@ -57,7 +57,12 @@ namespace PizzaPlace.Entities
 		[Display(Name = "Phone number:")]
 		public string Phone { get; set; }
 
+		[Required(ErrorMessage = "Required!")]
+		[Display(Name = "Premium coins:")]
+		[Range(0, 500, ErrorMessage = "Cannot be under 0 or above 500.")]
 		public int PremiumCoins { get; set; }
+
+		[Display(Name = "Role:")]
 		public Role Role { get; set; }
 		public List<CartItem> CartItems { get; set; }
 		public List<Order> Orders { get; set; }

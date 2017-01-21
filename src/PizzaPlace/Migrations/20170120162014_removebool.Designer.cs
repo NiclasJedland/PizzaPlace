@@ -8,9 +8,10 @@ using PizzaPlace.Entities;
 namespace PizzaPlace.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20170120162014_removebool")]
+    partial class removebool
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
@@ -157,9 +158,7 @@ namespace PizzaPlace.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<string>("Type");
 
                     b.HasKey("Id");
 
@@ -171,9 +170,7 @@ namespace PizzaPlace.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("IngredientName")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<string>("IngredientName");
 
                     b.Property<decimal>("Price");
 
