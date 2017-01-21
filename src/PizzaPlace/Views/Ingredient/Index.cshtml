@@ -5,72 +5,39 @@
 <h2>@ViewBag.Title</h2>
 
 <div class="row">
+	<div class="col-md-6">
+		<a asp-controller="Admin" asp-action="Index">Back to Admin</a>
+	</div>
+	<div class="col-md-6 text-right">
+		<a asp-controller="Ingredient" asp-action="Create">Create New Ingredient</a>
+	</div>
+</div>
+
+<div class="row">
 	<div col-md-12>
 		<table class="table table-bordered table-hover table-striped text-center">
 			<tr>
 				<th>
-					<label asp-for="Customer.FirstName"></label>
+					<label asp-for="Ingredient.IngredientName"></label>
 				</th>
 				<th>
-					<label asp-for="Customer.LastName"></label>
-				</th>
-				<th>
-					<label asp-for="Customer.Address"></label>
-				</th>
-				<th>
-					<label asp-for="Customer.Zip"></label>
-				</th>
-				<th>
-					<label asp-for="Customer.City"></label>
-				</th>
-				<th>
-					<label asp-for="Customer.Email"></label>
-				</th>
-				<th>
-					<label asp-for="Customer.Phone"></label>
-				</th>
-				<th>
-					<label asp-for="Customer.PremiumCoins"></label>
-				</th>
-				<th>
-					<label asp-for="Customer.Role.UserRole"></label>
+					<label asp-for="Ingredient.Price"></label>
 				</th>
 				<th></th>
 			</tr>
 
-			@foreach(var item in Model.Customers)
+			@foreach(var item in Model.Ingredients.OrderBy(s => s.IngredientName))
 			{
 				<tr>
 					<td>
-						@item.FirstName
+						@item.IngredientName
 					</td>
 					<td>
-						@item.LastName
+						@item.Price
 					</td>
 					<td>
-						@item.Address
-					</td>
-					<td>
-						@item.Zip
-					</td>
-					<td>
-						@item.City
-					</td>
-					<td>
-						@item.Email
-					</td>
-					<td>
-						@item.Phone
-					</td>
-					<td>
-						@item.PremiumCoins
-					</td>
-					<td>
-						@item.Role.UserRole
-					</td>
-					<td>
-						<a asp-controller="Customer" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-						<a asp-controller="Customer" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+						<a asp-controller="Ingredient" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+						<a asp-controller="Ingredient" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
 					</td>
 				</tr>
 			}

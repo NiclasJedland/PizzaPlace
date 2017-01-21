@@ -25,16 +25,21 @@ namespace PizzaPlace.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Delete(Customer customer)
+		public IActionResult Delete(FoodType foodType)
 		{
 			var vm = ViewModel.GetAllDbItems(db);
 
-			var deleted = vm.Customers.SingleOrDefault(s => s.Id == customer.Id);
+			var deleted = vm.FoodTypes.SingleOrDefault(s => s.Id == foodType.Id);
 
-			db.Customers.Remove(deleted);
+			foreach(var item in deleted.Foods)
+			{
+				item.FoodType = db.FoodTypes.SingleOrDefault(s => s.Type == "Other");
+			}
+
+			db.FoodTypes.Remove(deleted);
 			db.SaveChanges();
 
-			return RedirectToAction("Index", "Customer");
+			return RedirectToAction("Index", "FoodType");
 		}
 
 		[HttpGet]
@@ -42,53 +47,43 @@ namespace PizzaPlace.Controllers
 		{
 			var vm = ViewModel.GetAllDbItems(db);
 
-			vm.Customer = vm.Customers.SingleOrDefault(s => s.Id == id);
+			vm.FoodType = vm.FoodTypes.SingleOrDefault(s => s.Id == id);
 
 			return View(vm);
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Edit(Customer customer, Role role)
+		public IActionResult Edit(FoodType foodType)
 		{
 			if(!ModelState.IsValid)
 				return View();
 
-			var vm = ViewModel.GetAllRoles(db);
-
-			var getRole = vm.Roles.FirstOrDefault(s => s.UserRole == role.UserRole);
-			customer.Role = getRole;
-
-			db.Customers.Update(customer);
+			db.FoodTypes.Update(foodType);
 			db.SaveChanges();
 
-			return RedirectToAction("Index", "Customer");
+			return RedirectToAction("Index", "FoodType");
 		}
 
 		[HttpGet]
 		public IActionResult Create()
 		{
 			var vm = ViewModel.GetAllDbItems(db);
-			vm.Customer = new Customer();
-			vm.Role = new Role();
+
 			return View(vm);
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Create(Customer customer, Role role)
+		public IActionResult Create(FoodType foodType)
 		{
 			if(!ModelState.IsValid)
 				return View();
 
-			var vm = ViewModel.GetAllDbItems(db);
-			var getRole = vm.Roles.FirstOrDefault(s => s.UserRole == role.UserRole);
-			customer.Role = getRole;
-
-			db.Customers.Add(customer);
+			db.FoodTypes.Add(foodType);
 			db.SaveChanges();
 
-			return RedirectToAction("Index", "Customer");
+			return RedirectToAction("Index", "FoodType");
 		}
 	}
 

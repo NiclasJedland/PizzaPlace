@@ -25,16 +25,16 @@ namespace PizzaPlace.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Delete(Customer customer)
+		public IActionResult Delete(Ingredient ingredient)
 		{
 			var vm = ViewModel.GetAllDbItems(db);
 
-			var deleted = vm.Customers.SingleOrDefault(s => s.Id == customer.Id);
+			var deleted = vm.Ingredients.SingleOrDefault(s => s.Id == ingredient.Id);
 
-			db.Customers.Remove(deleted);
+			db.Ingredients.Remove(deleted);
 			db.SaveChanges();
 
-			return RedirectToAction("Index", "Customer");
+			return RedirectToAction("Index", "Ingredient");
 		}
 
 		[HttpGet]
@@ -42,53 +42,43 @@ namespace PizzaPlace.Controllers
 		{
 			var vm = ViewModel.GetAllDbItems(db);
 
-			vm.Customer = vm.Customers.SingleOrDefault(s => s.Id == id);
+			vm.FoodType = vm.FoodTypes.SingleOrDefault(s => s.Id == id);
 
 			return View(vm);
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Edit(Customer customer, Role role)
+		public IActionResult Edit(Ingredient ingredient)
 		{
 			if(!ModelState.IsValid)
 				return View();
 
-			var vm = ViewModel.GetAllRoles(db);
-
-			var getRole = vm.Roles.FirstOrDefault(s => s.UserRole == role.UserRole);
-			customer.Role = getRole;
-
-			db.Customers.Update(customer);
+			db.Ingredients.Update(ingredient);
 			db.SaveChanges();
 
-			return RedirectToAction("Index", "Customer");
+			return RedirectToAction("Index", "Ingredient");
 		}
 
 		[HttpGet]
 		public IActionResult Create()
 		{
 			var vm = ViewModel.GetAllDbItems(db);
-			vm.Customer = new Customer();
-			vm.Role = new Role();
+
 			return View(vm);
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Create(Customer customer, Role role)
+		public IActionResult Create(Ingredient ingredient)
 		{
 			if(!ModelState.IsValid)
 				return View();
 
-			var vm = ViewModel.GetAllDbItems(db);
-			var getRole = vm.Roles.FirstOrDefault(s => s.UserRole == role.UserRole);
-			customer.Role = getRole;
-
-			db.Customers.Add(customer);
+			db.Ingredients.Add(ingredient);
 			db.SaveChanges();
-
-			return RedirectToAction("Index", "Customer");
+			
+			return RedirectToAction("Index", "Ingredient");
 		}
 
 	}

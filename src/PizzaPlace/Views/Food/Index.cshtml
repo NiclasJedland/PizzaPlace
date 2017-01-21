@@ -35,7 +35,7 @@
 				<th></th>
 			</tr>
 
-			@foreach(var item in Model.Foods)
+			@foreach(var item in Model.Foods.OrderBy(s => s.Name))
 			{
 				<tr>
 					<td>

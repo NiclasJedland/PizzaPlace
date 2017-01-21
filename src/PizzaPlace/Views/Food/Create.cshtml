@@ -35,8 +35,6 @@
 						<span asp-validation-for="Food.Description" class="text-danger"></span>
 					</div>
 				</div>
-
-
 				<div class="form-group">
 					<label asp-for="Food.FoodType" class="col-md-2 control-label"></label>
 					<div class="col-md-10">
@@ -49,26 +47,6 @@
 						<span asp-validation-for="Food.FoodType" class="text-danger"></span>
 					</div>
 				</div>
-
-
-
-
-
-				@*<div class="form-group">
-					<label asp-for="Food.FoodType" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
-						@foreach(var item in Model.FoodTypes)
-						{
-							<label>
-								<input checked type="radio" asp-for="FoodType.Id" value="@item.Id" /> @item.Type
-							</label>
-						}
-						<span asp-validation-for="Food.FoodType" class="text-danger"></span>
-					</div>
-				</div>*@
-
-
-
 				<div class="form-group">
 					<label asp-for="Food.FoodIngredients" class="col-md-2 control-label"></label>
 					<div class="col-md-10">
@@ -83,7 +61,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-md-offset-2 col-md-10">
-						<button type="submit" class="btn btn-default">Register</button>
+						<button type="submit" class="btn btn-default">Submit</button>
 					</div>
 				</div>
 			</form>

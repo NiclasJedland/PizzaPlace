@@ -38,7 +38,7 @@ namespace PizzaPlace.Controllers
 
 			var search = searchType?.Trim().ToLower();
 
-			var viewModel = ViewModel.GetAllDbItems(db);
+			var vm = ViewModel.GetAllDbItems(db);		
 
 			ViewBag.search = searchType;
 
@@ -47,7 +47,7 @@ namespace PizzaPlace.Controllers
 			else
 				ViewBag.disable = "enable";
 
-			return View(viewModel);
+			return View(vm);
 		}
 		
 		public IActionResult AddToCart(int? id)

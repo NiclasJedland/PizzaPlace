@@ -32,6 +32,11 @@ namespace PizzaPlace.Controllers
 
 			var deleted = vm.Foods.SingleOrDefault(s => s.Id == food.Id);
 
+			foreach(var item in deleted.FoodIngredients)
+			{
+				db.FoodIngredients.Remove(item);
+			}
+
 			db.Foods.Remove(deleted);
 			db.SaveChanges();
 
@@ -54,8 +59,6 @@ namespace PizzaPlace.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult Edit(Food food, FoodType foodType, List<string> ingredients)
 		{
-			var errors = ModelState.Values.SelectMany(v => v.Errors);
-
 			if(!ModelState.IsValid)
 				return View();
 
@@ -66,12 +69,22 @@ namespace PizzaPlace.Controllers
 			var getIngredients = ViewModel.GetAllIngredients(db);
 			food.FoodIngredients = new List<FoodIngredient>();
 
+			foreach(var item in food.FoodIngredients)
+			{
+				db.FoodIngredients.Remove(item);
+			}
+			db.SaveChanges();
+
 			foreach(var item in ingredients)
 			{
-				var foodingredient = new FoodIngredient();
-				foodingredient.Ingredient = getIngredients.Ingredients.SingleOrDefault(s => s.Id.ToString() == item);
-				foodingredient.Food = food;
-				food.FoodIngredients.Add(foodingredient);
+				if(!food.FoodIngredients.Select(s => s.Ingredient.Id).Any(s => s.ToString() == item))
+				{
+					var foodingredient = new FoodIngredient();
+					foodingredient.Ingredient = getIngredients.Ingredients.SingleOrDefault(s => s.Id.ToString() == item);
+					foodingredient.Food = food;
+
+					food.FoodIngredients.Add(foodingredient);
+				}
 			}
 
 			db.Foods.Update(food);
@@ -90,7 +103,7 @@ namespace PizzaPlace.Controllers
 
 			vm.FoodType = new FoodType();
 			vm.FoodIngredient = new FoodIngredient();
-			
+
 			return View(vm);
 		}
 
@@ -100,11 +113,11 @@ namespace PizzaPlace.Controllers
 		{
 			if(!ModelState.IsValid)
 				return View();
-			
+
 			var foodTypes = ViewModel.GetAllFoodTypes(db);
 			var getType = foodTypes.FoodTypes.FirstOrDefault(s => s.Type == foodType.Type);
 			food.FoodType = getType;
-			
+
 			var getIngredients = ViewModel.GetAllIngredients(db);
 			food.FoodIngredients = new List<FoodIngredient>();
 

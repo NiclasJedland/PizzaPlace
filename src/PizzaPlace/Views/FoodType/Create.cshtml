@@ -1,0 +1,36 @@
+﻿@using System.Collections.Generic
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+
+@model ViewModel
+@{
+	ViewBag.Title = "FoodType Create";
+}
+<h2>@ViewBag.Title</h2>
+<a asp-controller="FoodType" asp-action="Index">Back to FoodType</a>
+
+<div class="row">
+	<div class="col-md-8">
+		<section>
+			<form asp-controller="FoodType" asp-action="Create" method="post" class="form-horizontal">
+				<hr />
+				<div class="form-group">
+					<label asp-for="FoodType.Type" class="col-md-2 control-label"></label>
+					<div class="col-md-10">
+						<input asp-for="FoodType.Type" class="form-control" />
+						<span asp-validation-for="FoodType.Type" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-offset-2 col-md-10">
+						<button type="submit" class="btn btn-default">Submit</button>
+					</div>
+				</div>
+			</form>
+		</section>
+	</div>
+</div>
+
+@section Scripts {
+	@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

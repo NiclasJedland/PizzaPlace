@@ -4,11 +4,39 @@
 
 @model ViewModel
 @{
-	ViewBag.Title = "Customer Create";
+	ViewBag.Title = "Ingredient Create";
 }
 <h2>@ViewBag.Title</h2>
-<a asp-controller="Admin" asp-action="Index">Back to Admin</a>
+<a asp-controller="Ingredient" asp-action="Index">Back to Ingredient</a>
 
+<div class="row">
+	<div class="col-md-8">
+		<section>
+			<form asp-controller="Ingredient" asp-action="Create" method="post" class="form-horizontal">
+				<hr />
+				<div class="form-group">
+					<label asp-for="Ingredient.IngredientName" class="col-md-2 control-label"></label>
+					<div class="col-md-10">
+						<input asp-for="Ingredient.IngredientName" class="form-control" />
+						<span asp-validation-for="Ingredient.IngredientName" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label asp-for="Ingredient.Price" class="col-md-2 control-label"></label>
+					<div class="col-md-10">
+						<input type="number" asp-for="Ingredient.Price" class="form-control" />
+						<span asp-validation-for="Ingredient.Price" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-md-offset-2 col-md-10">
+						<button type="submit" class="btn btn-default">Submit</button>
+					</div>
+				</div>
+			</form>
+		</section>
+	</div>
+</div>
 
 @section Scripts {
 	@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

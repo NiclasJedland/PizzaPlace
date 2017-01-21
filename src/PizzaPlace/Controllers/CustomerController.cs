@@ -31,6 +31,16 @@ namespace PizzaPlace.Controllers
 
 			var deleted = vm.Customers.SingleOrDefault(s => s.Id == customer.Id);
 
+			foreach(var cartItem in deleted.CartItems)
+			{
+				db.CartItems.Remove(cartItem);
+			}
+
+			foreach(var orders in deleted.Orders)
+			{	
+				db.Orders.Remove(orders);
+			}
+			
 			db.Customers.Remove(deleted);
 			db.SaveChanges();
 

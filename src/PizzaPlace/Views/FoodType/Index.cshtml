@@ -1,0 +1,39 @@
+﻿@model ViewModel
+@{
+	ViewBag.Title = "FoodType Index";
+}
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+	<div class="col-md-6">
+		<a asp-controller="Admin" asp-action="Index">Back to Admin</a>
+	</div>
+	<div class="col-md-6 text-right">
+		<a asp-controller="FoodType" asp-action="Create">Create New FoodType</a>
+	</div>
+</div>
+
+<div class="row">
+	<div col-md-12>
+		<table class="table table-bordered table-hover table-striped text-center">
+			<tr>
+				<th>
+					<label asp-for="FoodType.Type"></label>
+				</th>
+				<th></th>
+			</tr>
+			@foreach(var item in Model.FoodTypes.OrderBy(s => s.Type))
+			{
+				<tr>
+					<td>
+						@item.Type
+					</td>
+					<td>
+						<a asp-controller="FoodType" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+						<a asp-controller="FoodType" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+					</td>
+				</tr>
+			}
+		</table>
+	</div>
+</div>

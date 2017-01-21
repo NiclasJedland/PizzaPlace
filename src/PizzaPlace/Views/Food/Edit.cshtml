@@ -12,7 +12,7 @@
 	<div class="col-md-8">
 		<section>
 			<form asp-controller="Food" asp-action="Edit" method="post" class="form form-horizontal">
-				<h3>Customer id: @Model.Food.Id</h3><hr />
+				<h3>Food id: @Model.Food.Id</h3><hr />
 				<div hidden>
 					<label class="col-md-2" asp-for="Food.Id"></label>
 					<input readonly="readonly" asp-for="Food.Id" />
@@ -86,8 +86,10 @@
 						<span asp-validation-for="Food.FoodIngredients" class="text-danger"></span>
 					</div>
 				</div>
-				<div>
-					<button type="submit">Save</button>
+				<div class="form-group">
+					<div class="col-md-offset-2 col-md-10">
+						<button type="submit" class="btn btn-default">Submit</button>
+					</div>
 				</div>
 			</form>
 		</section>
