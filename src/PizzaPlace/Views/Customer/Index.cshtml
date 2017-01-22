@@ -47,7 +47,7 @@
 				<th></th>
 			</tr>
 
-			@foreach(var item in Model.Customers.OrderBy(s => s.FirstName).ThenBy(s => s.LastName).ThenBy(s => s.AccountName))
+			@foreach(var item in Model.Customers.OrderBy(s => s.FirstName).ThenBy(s => s.Role).ThenBy(s => s.LastName).ThenBy(s => s.AccountName))
 			{
 				<tr>
 					<td>

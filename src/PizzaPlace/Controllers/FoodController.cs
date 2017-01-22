@@ -62,32 +62,41 @@ namespace PizzaPlace.Controllers
 			if(!ModelState.IsValid)
 				return View();
 
+			var vm = ViewModel.GetAllDbItems(db);
+			var changed = vm.Foods.SingleOrDefault(s => s.Id == food.Id);
+
 			var foodTypes = ViewModel.GetAllFoodTypes(db);
 			var getType = foodTypes.FoodTypes.FirstOrDefault(s => s.Type == foodType.Type);
-			food.FoodType = getType;
+			changed.FoodType = getType;
 
 			var getIngredients = ViewModel.GetAllIngredients(db);
-			food.FoodIngredients = new List<FoodIngredient>();
 
-			foreach(var item in food.FoodIngredients)
+			foreach(var item in changed.FoodIngredients)
 			{
 				db.FoodIngredients.Remove(item);
 			}
-			db.SaveChanges();
 
-			foreach(var item in ingredients)
+			if(!ingredients.Contains("No Ingredients"))
 			{
-				if(!food.FoodIngredients.Select(s => s.Ingredient.Id).Any(s => s.ToString() == item))
+				foreach(var item in ingredients)
 				{
 					var foodingredient = new FoodIngredient();
 					foodingredient.Ingredient = getIngredients.Ingredients.SingleOrDefault(s => s.Id.ToString() == item);
-					foodingredient.Food = food;
+					foodingredient.Food = changed;
 
-					food.FoodIngredients.Add(foodingredient);
+					changed.FoodIngredients.Add(foodingredient);
 				}
 			}
 
-			db.Foods.Update(food);
+			if(changed.FoodIngredients == null)
+			{
+				var foodingredient = new FoodIngredient();
+				foodingredient.Ingredient = getIngredients.Ingredients.SingleOrDefault(s => s.Id.ToString() == "No Ingredients");
+
+				changed.FoodIngredients.Add(foodingredient);
+			}
+
+			db.Foods.Update(changed);
 			db.SaveChanges();
 
 			return RedirectToAction("Index", "Food");

@@ -8,8 +8,8 @@ using PizzaPlace.Entities;
 namespace PizzaPlace.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20170120091542_alternatekey")]
-    partial class alternatekey
+    [Migration("20170121222107_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -84,9 +84,6 @@ namespace PizzaPlace.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("AccountName")
-                        .HasName("AlternateKey_AccountName");
-
                     b.HasIndex("RoleId");
 
                     b.ToTable("Customers");
@@ -97,11 +94,14 @@ namespace PizzaPlace.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000);
 
                     b.Property<int?>("FoodTypeId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<decimal>("Price");
 
@@ -155,7 +155,9 @@ namespace PizzaPlace.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Type");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.HasKey("Id");
 
@@ -167,7 +169,9 @@ namespace PizzaPlace.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("IngredientName");
+                    b.Property<string>("IngredientName")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<decimal>("Price");
 

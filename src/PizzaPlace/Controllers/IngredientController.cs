@@ -11,7 +11,7 @@ namespace PizzaPlace.Controllers
 {
 	[Authorize(Policy = "AdministratorOnly")]
 	public class IngredientController : Controller
-    {
+	{
 		private DatabaseContext db;
 		public IngredientController(DatabaseContext _context)
 		{
@@ -31,6 +31,14 @@ namespace PizzaPlace.Controllers
 
 			var deleted = vm.Ingredients.SingleOrDefault(s => s.Id == ingredient.Id);
 
+			if(deleted.FoodIngredients != null)
+			{
+				foreach(var item in deleted.FoodIngredients)
+				{
+					db.FoodIngredients.Remove(item);
+				}
+			}
+
 			db.Ingredients.Remove(deleted);
 			db.SaveChanges();
 
@@ -42,7 +50,7 @@ namespace PizzaPlace.Controllers
 		{
 			var vm = ViewModel.GetAllDbItems(db);
 
-			vm.FoodType = vm.FoodTypes.SingleOrDefault(s => s.Id == id);
+			vm.Ingredient = vm.Ingredients.SingleOrDefault(s => s.Id == id);
 
 			return View(vm);
 		}
@@ -77,7 +85,7 @@ namespace PizzaPlace.Controllers
 
 			db.Ingredients.Add(ingredient);
 			db.SaveChanges();
-			
+
 			return RedirectToAction("Index", "Ingredient");
 		}
 

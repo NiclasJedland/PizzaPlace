@@ -31,9 +31,12 @@ namespace PizzaPlace.Controllers
 
 			var deleted = vm.FoodTypes.SingleOrDefault(s => s.Id == foodType.Id);
 
-			foreach(var item in deleted.Foods)
+			if(deleted.Foods != null)
 			{
-				item.FoodType = db.FoodTypes.SingleOrDefault(s => s.Type == "Other");
+				foreach(var item in deleted.Foods)
+				{
+					item.FoodType = db.FoodTypes.SingleOrDefault(s => s.Type == "Other");
+				}
 			}
 
 			db.FoodTypes.Remove(deleted);

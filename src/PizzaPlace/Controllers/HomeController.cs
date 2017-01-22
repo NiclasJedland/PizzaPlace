@@ -62,8 +62,7 @@ namespace PizzaPlace.Controllers
 
 				var cart = new CartItem { DateCreated = DateTime.Now, Food = newFood };
 
-				var customer = db.Customers.Include(s => s.CartItems)
-					.SingleOrDefault(s => s.Id == int.Parse(claim.Value));
+				var customer = db.Customers.Include(s => s.CartItems).SingleOrDefault(s => s.Id == int.Parse(claim.Value));
 
 				customer.CartItems.Add(cart);
 				db.Customers.Update(customer);

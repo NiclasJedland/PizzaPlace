@@ -33,6 +33,7 @@ namespace PizzaPlace.Models
 			var foodHamburger = new Food { Name = "Cheeseburger", FoodType = typeOther, Description = "", Price = 90 };
 
 			//ingredients
+			var noIngredients = new Ingredient { IngredientName = "No Ingredients", Price = 0 };
 			var salad = new Ingredient { IngredientName = "Salad", Price = 5 };
 			var ham = new Ingredient { IngredientName = "Ham", Price = 15 };
 			var onion = new Ingredient { IngredientName = "Onion", Price = 5 };

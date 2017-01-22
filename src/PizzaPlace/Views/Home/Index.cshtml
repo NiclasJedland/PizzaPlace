@@ -92,7 +92,7 @@
 							}
 							<tr>
 								<td class="text-right lead text-uppercase">Total cost:</td>
-								@if(currentUser.PremiumCoins >= 100)
+								@if(currentUser.PremiumCoins >= 100) //&& currentUserCart.Count() > 2)
 								{
 									@if((currentUser.Role.UserRole == PizzaPlace.Entities.UserRole.PremiumUser || currentUser.Role.UserRole == PizzaPlace.Entities.UserRole.Admin) && currentUserCart.Count() > 2)
 									{

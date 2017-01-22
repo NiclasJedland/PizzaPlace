@@ -67,24 +67,32 @@
 
 				<div class="form-group">
 					<label asp-for="Food.FoodIngredients" class="col-md-2 control-label"></label>
-					<div class="col-md-10">
+					<div class="col-md-10" id="checkboxes">
 						@foreach(var item in Model.Ingredients.OrderBy(s => s.IngredientName))
 						{
 							if(Model.Food.FoodIngredients.Select(s => s.Ingredient.Id).Any(s => s == item.Id))
 							{
 								<label>
-									<input checked type="checkbox" name="ingredients" value="@item.Id" /> @item.IngredientName
+									<input id="ingredientClass" checked type="checkbox" name="ingredients" value="@item.Id" /> @item.IngredientName
 								</label>
 							}
 							else
 							{
 								<label>
-									<input type="checkbox" name="ingredients" value="@item.Id" /> @item.IngredientName
+									<input id="ingredientClass" type="checkbox" name="ingredients" value="@item.Id" /> @item.IngredientName
 								</label>
 							}
 						}
+						<div class="form-group">
+							<div class="col-md-10">
+								<label >
+									<input id="selectnone" type="checkbox" name="ingredients" value="ingredients" /> No Ingredients
+								</label>
+							</div>
+						</div>
 						<span asp-validation-for="Food.FoodIngredients" class="text-danger"></span>
 					</div>
+
 				</div>
 				<div class="form-group">
 					<div class="col-md-offset-2 col-md-10">
@@ -95,6 +103,11 @@
 		</section>
 	</div>
 </div>
+<script>
+
+</script>
 @section Scripts {
 	@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+	
+	
 }
