@@ -73,8 +73,8 @@ namespace PizzaPlace.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Register(Customer customer)
 		{
-			if(!ModelState.IsValid)
-				return RedirectToAction("Register");
+			if(!ModelState.IsValid || db.Customers.Any(s => s.AccountName.ToLower() == customer.AccountName.ToLower()))
+				return RedirectToAction("Register", "AccoutName already exist!");
 
 			customer.Role = db.Roles.FirstOrDefault(s => s.UserRole == UserRole.RegularUser);
 

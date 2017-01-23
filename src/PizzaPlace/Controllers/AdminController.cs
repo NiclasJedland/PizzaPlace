@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using PizzaPlace.Entities;
 using Microsoft.AspNetCore.Authorization;
 
-
 namespace PizzaPlace.Controllers
 {
 	[Authorize(Policy = "AdministratorOnly")]

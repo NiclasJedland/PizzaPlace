@@ -11,18 +11,18 @@ namespace PizzaPlace.Controllers
 {
 	[Authorize(Policy = "AdministratorOnly")]
 	public class CustomerController : Controller
-    {
+	{
 		private DatabaseContext db;
 		public CustomerController(DatabaseContext _context)
 		{
 			db = _context;
 		}
 		public IActionResult Index()
-        {
+		{
 			var vm = ViewModel.GetAllDbItems(db);
 
 			return View(vm);
-        }
+		}
 
 		[HttpGet]
 		public IActionResult Delete(Customer customer)
@@ -31,16 +31,23 @@ namespace PizzaPlace.Controllers
 
 			var deleted = vm.Customers.SingleOrDefault(s => s.Id == customer.Id);
 
-			foreach(var cartItem in deleted.CartItems)
+
+			if(deleted.CartItems != null)
 			{
-				db.CartItems.Remove(cartItem);
+				foreach(var cartItem in deleted.CartItems)
+				{
+					db.CartItems.Remove(cartItem);
+				}
 			}
 
-			foreach(var orders in deleted.Orders)
-			{	
-				db.Orders.Remove(orders);
+			if(deleted.Orders != null)
+			{
+				foreach(var orders in deleted.Orders)
+				{
+					db.Orders.Remove(orders);
+				}
 			}
-			
+
 			db.Customers.Remove(deleted);
 			db.SaveChanges();
 
@@ -88,8 +95,8 @@ namespace PizzaPlace.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult Create(Customer customer, Role role)
 		{
-			if(!ModelState.IsValid)
-				return View();
+			if(!ModelState.IsValid || db.Customers.Any(s => s.AccountName.ToLower() == customer.AccountName.ToLower()))
+				return View("Create", "Accoutname already exist");
 
 			var vm = ViewModel.GetAllDbItems(db);
 			var getRole = vm.Roles.FirstOrDefault(s => s.UserRole == role.UserRole);

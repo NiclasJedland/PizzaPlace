@@ -8,7 +8,7 @@ using PizzaPlace.Entities;
 namespace PizzaPlace.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20170121222107_first")]
+    [Migration("20170123080609_first")]
     partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

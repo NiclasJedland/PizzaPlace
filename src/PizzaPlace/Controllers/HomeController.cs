@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace PizzaPlace.Controllers
 {
-	[AllowAnonymous]
 	[Authorize(Policy = "MembersOnly")]
 	public class HomeController : Controller
 	{
@@ -32,6 +31,7 @@ namespace PizzaPlace.Controllers
 		const string claimRegularUser = "RegularUser";
 		const string claimMember = "Member";
 
+		[AllowAnonymous]
 		public IActionResult Index(string searchType, string disable)
 		{
 			DbInitialize.Seed(db);
